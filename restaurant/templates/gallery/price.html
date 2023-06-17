@@ -1,0 +1,176 @@
+{% extends 'base.html'%}
+{% load static%}
+{% block content%}
+<!-- ========================= SECTION PAGETOP ========================= -->
+<section class="section-pagetop bg">
+  <div class="container m-t-150">
+    {% if 'price' in request.path %}
+		<h2 class="title-page">Price Result</h2>
+    {% elif 'calory' in request.path %}
+    <h2 class="title-page">Calory Result</h2>
+	{% else %}
+		<h2 class="title-page">Our Store</h2>
+	{% endif %}
+  </div> <!-- container //  -->
+  </section>
+  <!-- ========================= SECTION INTRO END// ========================= -->
+  <!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content padding-y m-t-20 m-b-50">
+  <div class="container">
+  
+  <div class="row">
+    <aside class="col-md-3">
+      
+  <div class="card">
+    <article class="filter-group">
+      <header class="card-header">
+        <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+          <i class="icon-control fa fa-chevron-down"></i>
+          <h6 class="title">Categories</h6>
+        </a>
+      </header>
+      <div class="filter-content collapse show" id="collapse_1" style="">
+        <div class="card-body">
+          
+          <ul class="list-menu">
+            <li><a href="{%url 'menu'%}">All Products</a></li>
+            {% for Categories in  links %}
+            <li><a href="{{Categories.get_url}}">{{Categories.name}}</a></li>
+            {% endfor %}
+          </ul>
+  
+        </div> <!-- card-body.// -->
+      </div>
+    </article> <!-- filter-group  .// -->
+ <!-- filter-group .// -->
+ <article class="filter-group">
+  <header class="card-header">
+    <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
+      <i class="icon-control fa fa-chevron-down"></i>
+      <h6 class="title">Calories range </h6>
+    </a>
+  </header>
+  <div class="filter-content collapse show" id="collapse_3" style="">
+    <div class="card-body">
+  
+      <form method="post" action="{% url 'product_list2' %}">
+        {% csrf_token %}
+        <label for="calory_min">Calory min:</label>
+        <input type="number" name="calory_min" id="calory_min">
+        <label for="calory_max" class="m-t-20">Calory max:</label>
+        <input type="number" name="calory_max" id="calory_max">
+        <button type="submit" name="submit2" class="btn btn-block btn-danger m-t-20">Filter</button>
+    </form>
+    </div><!-- card-body.// -->
+  </div>
+</article> <!-- filter-group .// -->
+    
+    <article class="filter-group">
+      <header class="card-header">
+        <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
+          <i class="icon-control fa fa-chevron-down"></i>
+          <h6 class="title">Price range </h6>
+        </a>
+      </header>
+      <div class="filter-content collapse show" id="collapse_3" style="">
+        <div class="card-body">
+        <form method="post" action="{% url 'product_list' %}">
+          {% csrf_token %}
+          <label for="price_min">Price min:</label>
+          <input type="number" name="price_min" id="price_min">
+          <label for="price_max" class="m-t-20">Price max:</label>
+          <input type="number" name="price_max" id="price_max">
+          <button type="submit" class="btn btn-block btn-danger m-t-20">Filter</button>
+      </form>
+
+        </div><!-- card-body.// -->
+      </div>
+    </article> <!-- filter-group .// -->
+    
+  </div> <!-- card.// -->
+  
+    </aside> <!-- col.// -->
+    <main class="col-md-9">
+  
+  <header class="border-bottom mb-4 pb-3">
+      <div class="form-inline">
+        <span class="mr-md-auto"><b>{{product_count}}</b> Items found </span>
+        
+      </div>
+  </header><!-- sect-heading -->
+  
+  <div class="row">
+    {% if products %}
+    {% for product in products %}
+    <div class="col-md-4">
+      <figure class="card card-product-grid ">
+        <div class="img-wrap"> 
+          
+          <a href="{{product.get_url}}">
+            <img src="{{product.image.url}}" width="250" height="200" style="margin:auto;display: block;margin-bottom:20px;">
+          </a>
+          
+        </div> <!-- img-wrap.// -->
+        <figcaption class="info-wrap">
+          <div class="fix-height text-center m-b-20">
+            <a href="{{product.get_url}}" class="title">{{product.name}}</a>
+            <div class="price-wrap mt-2">
+                <span class="price">$ {{product.price}}</span>
+                <div><a href="{% url 'add_to_wishlist' product.id %}"><i class="fa fa-heart-o" aria-hidden="true"></i></a></div>
+              <div class="rating-star">
+                <span>
+                    <i class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif product.averageReview >= 0.5 and product.averageReview < 1 %}-half-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if product.averageReview < 1.5 %}-o{% elif product.averageReview >= 1.5 and product.averageReview < 2 %}-half-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if product.averageReview < 2.5 %}-o{% elif product.averageReview >= 2.5 and product.averageReview < 3 %}-half-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if product.averageReview < 3.5 %}-o{% elif product.averageReview >= 3.5 and product.averageReview < 4 %}-half-o {% endif %}" aria-hidden="true"></i>
+                    <i class="fa fa-star{% if product.averageReview < 4.5 %}-o{% elif product.averageReview >= 4.5 and product.averageReview < 5 %}-half-o {% endif %}" aria-hidden="true"></i>
+                </span>
+              </div>
+            </div> <!-- price-wrap.// -->
+          </div>
+          <a href="{{product.get_url}}" class="btn btn-block btn-danger">View Details </a>
+        </figcaption>
+      </figure>
+    </div> <!-- col.// -->
+    {% endfor%}
+    {% include 'includes/alerts.html' %}
+    {% else %}
+    <div>
+      <h2>No Meal Found</h2>
+    </div>
+    {% endif %}
+  </div> <!-- row end.// -->
+  
+  
+  {% comment %} <nav class="mt-4" aria-label="Page navigation sample">
+    {% if products.has_other_pages %}
+    <ul class="pagination">
+      {% if products.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{products.Previous_page_number}}">Previous</a></li>
+      {% else %}
+      <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+      {% endif %}
+      {% for i in products.paginator.page_range %}
+        {% if products.number == i %}
+          <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if products.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{products.next_page_number}}">Next</a></li>
+      {% else %}
+      <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+      {% endif %}
+    </ul>
+    {% endif %}
+  </nav> {% endcomment %}
+  
+    </main> <!-- col.// -->
+  
+  </div>
+  
+  </div> <!-- container .//  -->
+  </section>
+  <!-- ========================= SECTION CONTENT END// ========================= -->
+{% endblock%}

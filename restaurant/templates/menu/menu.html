@@ -1,0 +1,33 @@
+{% extends 'base.html'%}
+{% load static%}
+{% block content%}
+	<!-- Title Page -->
+	<section class="bg-title-page flex-c-m p-t-160 p-b-80 p-l-15 p-r-15 mb-5" style="background-image: url({% static 'images/bg-title-page-01.jpg' %});">
+		<h2 class="tit6 t-center">
+			Pato Menu
+		</h2>
+ </section>
+
+	<div class="row m-t-130 m-b-130">
+	  {% for categories in links%}
+		<div class="col-md-4 mt-3 mb-3 p-5">
+			<figure class="card card-product-grid">
+				<div class="img-wrap"> 
+					
+					<a href="{{categories.get_url}}">
+						<img src="{{categories.image.url}}" alt="image" width="360" height="300">
+					</a>
+					
+				</div> <!-- img-wrap.// -->
+				<figcaption class="info-wrap">
+					<div class="fix-height text-center mt-3 mb-3">
+						<a href="{{categories.get_url}}" class="title" style="color: #dc3545; font-size:22px">{{categories.name}}</a>
+					</div>
+					<a href="{{categories.get_url}}" class="btn btn-block btn-danger">View Details </a>
+				</figcaption>
+			</figure>
+		</div> <!-- col.// -->
+		{% endfor%}
+	</div> <!-- row end.// --> 
+
+{% endblock%}
